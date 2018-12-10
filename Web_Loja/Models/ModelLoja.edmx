@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LojaVirtualModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LojaVirtualModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categorias">
           <Key>
             <PropertyRef Name="id_cat_pk" />
@@ -12,9 +12,9 @@
           <Property Name="id_cat_pk" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="desc_cat" Type="nchar" MaxLength="100" Nullable="false" />
           <Property Name="status" Type="tinyint" Nullable="false" />
-          <Property Name="data_cri_cat" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="data_cri_cat" Type="datetime" />
           <Property Name="data_cri_att" Type="datetime" />
-          <Property Name="fk_cat_super" Type="bigint" Nullable="false" />
+          <Property Name="fk_cat_super" Type="bigint" />
         </EntityType>
         <EntityType Name="Produtos">
           <Key>
@@ -24,15 +24,14 @@
           <Property Name="desc_prod" Type="nchar" MaxLength="100" Nullable="false" />
           <Property Name="cod_barras" Type="nchar" MaxLength="100" Nullable="false" />
           <Property Name="fk_cat" Type="bigint" Nullable="false" />
-          <Property Name="valor" Type="numeric" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="qtd_prod" Type="numeric" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="fk_prod_super" Type="bigint" Nullable="false" />
-          <Property Name="data_cri_prod" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="qtd_prod" Type="int" Nullable="false" />
+          <Property Name="fk_prod_super" Type="bigint" />
+          <Property Name="data_cri_prod" Type="datetime" />
           <Property Name="data_att_prod" Type="datetime" />
           <Property Name="status" Type="tinyint" Nullable="false" />
         </EntityType>
         <Association Name="FK_Categorias_Categorias">
-          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
+          <End Role="Categorias" Type="Self.Categorias" Multiplicity="0..1" />
           <End Role="Categorias1" Type="Self.Categorias" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categorias">
@@ -56,7 +55,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Produtos_Produtos">
-          <End Role="Produtos" Type="Self.Produtos" Multiplicity="1" />
+          <End Role="Produtos" Type="Self.Produtos" Multiplicity="0..1" />
           <End Role="Produtos1" Type="Self.Produtos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Produtos">
@@ -68,6 +67,13 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="LojaVirtual" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PadraoId" Type="int" Mode="In" />
+          <Parameter Name="CategoriaNome" Type="varchar" Mode="In" />
+          <Parameter Name="fk_super" Type="bigint" Mode="In" />
+          <Parameter Name="data_criacao" Type="datetime" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
           <Parameter Name="owner_id" Type="int" Mode="In" />
@@ -114,94 +120,11 @@
             <End Role="Produtos1" EntitySet="Produtos" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LojaVirtualModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Categorias">
-          <Key>
-            <PropertyRef Name="id_cat_pk" />
-          </Key>
-          <Property Name="id_cat_pk" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="desc_cat" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="status" Type="Byte" Nullable="false" />
-          <Property Name="data_cri_cat" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="data_cri_att" Type="DateTime" Precision="3" />
-          <Property Name="fk_cat_super" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="Categorias1" Relationship="Self.FK_Categorias_Categorias" FromRole="Categorias" ToRole="Categorias1" />
-          <NavigationProperty Name="Categorias2" Relationship="Self.FK_Categorias_Categorias" FromRole="Categorias1" ToRole="Categorias" />
-          <NavigationProperty Name="Produtos" Relationship="Self.FK_Produtos_Categorias" FromRole="Categorias" ToRole="Produtos" />
-        </EntityType>
-        <EntityType Name="Produtos">
-          <Key>
-            <PropertyRef Name="id_prod_pk" />
-          </Key>
-          <Property Name="id_prod_pk" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="desc_prod" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="cod_barras" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="fk_cat" Type="Int64" Nullable="false" />
-          <Property Name="valor" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="qtd_prod" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="fk_prod_super" Type="Int64" Nullable="false" />
-          <Property Name="data_cri_prod" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="data_att_prod" Type="DateTime" Precision="3" />
-          <Property Name="status" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="Categorias" Relationship="Self.FK_Produtos_Categorias" FromRole="Produtos" ToRole="Categorias" />
-          <NavigationProperty Name="Produtos1" Relationship="Self.FK_Produtos_Produtos" FromRole="Produtos" ToRole="Produtos1" />
-          <NavigationProperty Name="Produtos2" Relationship="Self.FK_Produtos_Produtos" FromRole="Produtos1" ToRole="Produtos" />
-        </EntityType>
-        <Association Name="FK_Categorias_Categorias">
-          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
-          <End Role="Categorias1" Type="Self.Categorias" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categorias">
-              <PropertyRef Name="id_cat_pk" />
-            </Principal>
-            <Dependent Role="Categorias1">
-              <PropertyRef Name="fk_cat_super" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Produtos_Categorias">
-          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
-          <End Role="Produtos" Type="Self.Produtos" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categorias">
-              <PropertyRef Name="id_cat_pk" />
-            </Principal>
-            <Dependent Role="Produtos">
-              <PropertyRef Name="fk_cat" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Produtos_Produtos">
-          <End Role="Produtos" Type="Self.Produtos" Multiplicity="1" />
-          <End Role="Produtos1" Type="Self.Produtos" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Produtos">
-              <PropertyRef Name="id_prod_pk" />
-            </Principal>
-            <Dependent Role="Produtos1">
-              <PropertyRef Name="fk_prod_super" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="LojaVirtualEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categorias" EntityType="Self.Categorias" />
-          <EntitySet Name="Produtos" EntityType="Self.Produtos" />
-          <AssociationSet Name="FK_Categorias_Categorias" Association="Self.FK_Categorias_Categorias">
-            <End Role="Categorias" EntitySet="Categorias" />
-            <End Role="Categorias1" EntitySet="Categorias" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Produtos_Categorias" Association="Self.FK_Produtos_Categorias">
-            <End Role="Categorias" EntitySet="Categorias" />
-            <End Role="Produtos" EntitySet="Produtos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Produtos_Produtos" Association="Self.FK_Produtos_Produtos">
-            <End Role="Produtos" EntitySet="Produtos" />
-            <End Role="Produtos1" EntitySet="Produtos" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -232,7 +155,28 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
+          <EntitySet Name="Categorias" EntityType="LojaVirtualModel.Categorias" />
+          <EntitySet Name="Produtos" EntityType="LojaVirtualModel.Produtos" />
+          <AssociationSet Name="FK_Categorias_Categorias" Association="LojaVirtualModel.FK_Categorias_Categorias">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="Categorias1" EntitySet="Categorias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produtos_Categorias" Association="LojaVirtualModel.FK_Produtos_Categorias">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="Produtos" EntitySet="Produtos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produtos_Produtos" Association="LojaVirtualModel.FK_Produtos_Produtos">
+            <End Role="Produtos" EntitySet="Produtos" />
+            <End Role="Produtos1" EntitySet="Produtos" />
+          </AssociationSet>
+          <FunctionImport Name="LojaVirtual" ReturnType="Collection(Decimal)">
+            <Parameter Name="PadraoId" Mode="In" Type="Int32" />
+            <Parameter Name="CategoriaNome" Mode="In" Type="String" />
+            <Parameter Name="fk_super" Mode="In" Type="Int64" />
+            <Parameter Name="data_criacao" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -244,40 +188,79 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="Categorias">
+          <Key>
+            <PropertyRef Name="id_cat_pk" />
+          </Key>
+          <Property Name="id_cat_pk" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="desc_cat" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="status" Type="Byte" Nullable="false" />
+          <Property Name="data_cri_cat" Type="DateTime" Precision="3" />
+          <Property Name="data_cri_att" Type="DateTime" Precision="3" />
+          <Property Name="fk_cat_super" Type="Int64" />
+          <NavigationProperty Name="Categorias1" Relationship="LojaVirtualModel.FK_Categorias_Categorias" FromRole="Categorias" ToRole="Categorias1" />
+          <NavigationProperty Name="Categorias2" Relationship="LojaVirtualModel.FK_Categorias_Categorias" FromRole="Categorias1" ToRole="Categorias" />
+          <NavigationProperty Name="Produtos" Relationship="LojaVirtualModel.FK_Produtos_Categorias" FromRole="Categorias" ToRole="Produtos" />
+        </EntityType>
+        <EntityType Name="Produtos">
+          <Key>
+            <PropertyRef Name="id_prod_pk" />
+          </Key>
+          <Property Name="id_prod_pk" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="desc_prod" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="cod_barras" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="fk_cat" Type="Int64" Nullable="false" />
+          <Property Name="qtd_prod" Type="Int32" Nullable="false" />
+          <Property Name="fk_prod_super" Type="Int64" />
+          <Property Name="data_cri_prod" Type="DateTime" Precision="3" />
+          <Property Name="data_att_prod" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Categorias" Relationship="LojaVirtualModel.FK_Produtos_Categorias" FromRole="Produtos" ToRole="Categorias" />
+          <NavigationProperty Name="Produtos1" Relationship="LojaVirtualModel.FK_Produtos_Produtos" FromRole="Produtos" ToRole="Produtos1" />
+          <NavigationProperty Name="Produtos2" Relationship="LojaVirtualModel.FK_Produtos_Produtos" FromRole="Produtos1" ToRole="Produtos" />
+        </EntityType>
+        <Association Name="FK_Categorias_Categorias">
+          <End Type="LojaVirtualModel.Categorias" Role="Categorias" Multiplicity="0..1" />
+          <End Type="LojaVirtualModel.Categorias" Role="Categorias1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="id_cat_pk" />
+            </Principal>
+            <Dependent Role="Categorias1">
+              <PropertyRef Name="fk_cat_super" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produtos_Categorias">
+          <End Type="LojaVirtualModel.Categorias" Role="Categorias" Multiplicity="1" />
+          <End Type="LojaVirtualModel.Produtos" Role="Produtos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="id_cat_pk" />
+            </Principal>
+            <Dependent Role="Produtos">
+              <PropertyRef Name="fk_cat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produtos_Produtos">
+          <End Type="LojaVirtualModel.Produtos" Role="Produtos" Multiplicity="0..1" />
+          <End Type="LojaVirtualModel.Produtos" Role="Produtos1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produtos">
+              <PropertyRef Name="id_prod_pk" />
+            </Principal>
+            <Dependent Role="Produtos1">
+              <PropertyRef Name="fk_prod_super" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LojaVirtualModelStoreContainer" CdmEntityContainer="LojaVirtualEntities">
-          <EntitySetMapping Name="Categorias">
-            <EntityTypeMapping TypeName="LojaVirtualModel.Categorias">
-              <MappingFragment StoreEntitySet="Categorias">
-                <ScalarProperty Name="id_cat_pk" ColumnName="id_cat_pk" />
-                <ScalarProperty Name="desc_cat" ColumnName="desc_cat" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="data_cri_cat" ColumnName="data_cri_cat" />
-                <ScalarProperty Name="data_cri_att" ColumnName="data_cri_att" />
-                <ScalarProperty Name="fk_cat_super" ColumnName="fk_cat_super" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Produtos">
-            <EntityTypeMapping TypeName="LojaVirtualModel.Produtos">
-              <MappingFragment StoreEntitySet="Produtos">
-                <ScalarProperty Name="id_prod_pk" ColumnName="id_prod_pk" />
-                <ScalarProperty Name="desc_prod" ColumnName="desc_prod" />
-                <ScalarProperty Name="cod_barras" ColumnName="cod_barras" />
-                <ScalarProperty Name="fk_cat" ColumnName="fk_cat" />
-                <ScalarProperty Name="valor" ColumnName="valor" />
-                <ScalarProperty Name="qtd_prod" ColumnName="qtd_prod" />
-                <ScalarProperty Name="fk_prod_super" ColumnName="fk_prod_super" />
-                <ScalarProperty Name="data_cri_prod" ColumnName="data_cri_prod" />
-                <ScalarProperty Name="data_att_prod" ColumnName="data_att_prod" />
-                <ScalarProperty Name="status" ColumnName="status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="LojaVirtualModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="LojaVirtualModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="LojaVirtualModel.Store.sp_dropdiagram" />
@@ -302,7 +285,35 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="LojaVirtualModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="LojaVirtualModel.Store.sp_upgraddiagrams" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Categorias">
+            <EntityTypeMapping TypeName="LojaVirtualModel.Categorias">
+              <MappingFragment StoreEntitySet="Categorias">
+                <ScalarProperty Name="fk_cat_super" ColumnName="fk_cat_super" />
+                <ScalarProperty Name="data_cri_att" ColumnName="data_cri_att" />
+                <ScalarProperty Name="data_cri_cat" ColumnName="data_cri_cat" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="desc_cat" ColumnName="desc_cat" />
+                <ScalarProperty Name="id_cat_pk" ColumnName="id_cat_pk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produtos">
+            <EntityTypeMapping TypeName="LojaVirtualModel.Produtos">
+              <MappingFragment StoreEntitySet="Produtos">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="data_att_prod" ColumnName="data_att_prod" />
+                <ScalarProperty Name="data_cri_prod" ColumnName="data_cri_prod" />
+                <ScalarProperty Name="fk_prod_super" ColumnName="fk_prod_super" />
+                <ScalarProperty Name="qtd_prod" ColumnName="qtd_prod" />
+                <ScalarProperty Name="fk_cat" ColumnName="fk_cat" />
+                <ScalarProperty Name="cod_barras" ColumnName="cod_barras" />
+                <ScalarProperty Name="desc_prod" ColumnName="desc_prod" />
+                <ScalarProperty Name="id_prod_pk" ColumnName="id_prod_pk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="LojaVirtual" FunctionName="LojaVirtualModel.Store.LojaVirtual" />
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

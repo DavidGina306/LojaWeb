@@ -24,10 +24,9 @@ namespace Web_Loja.Models
         public string desc_prod { get; set; }
         public string cod_barras { get; set; }
         public long fk_cat { get; set; }
-        public decimal valor { get; set; }
-        public decimal qtd_prod { get; set; }
-        public long fk_prod_super { get; set; }
-        public byte[] data_cri_prod { get; set; }
+        public int qtd_prod { get; set; }
+        public Nullable<long> fk_prod_super { get; set; }
+        public Nullable<System.DateTime> data_cri_prod { get; set; }
         public Nullable<System.DateTime> data_att_prod { get; set; }
         public byte status { get; set; }
     

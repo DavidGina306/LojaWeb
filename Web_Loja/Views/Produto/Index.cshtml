@@ -1,10 +1,10 @@
-﻿
-@{
-    /**/
+﻿@model Web_Loja.Models.Produtos
 
-    ViewBag.Title = "LOJAWEB - CATEGORIA";
+@{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
+
 
 @section head {
     <link href=@Url.Content("/Content/plugins/bower_components/datatables/jquery.dataTables.min.css") rel="stylesheet" type="text/css" />
@@ -19,6 +19,10 @@
     <link href=@Url.Content("/Content/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css") rel="stylesheet" />
     <link href=@Url.Content("/Content/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css") rel="stylesheet" />
     <link href=@Url.Content("/Content/plugins/bower_components/multiselect/css/multi-select.css") rel="stylesheet" type="text/css" />
+    <!-- Wizard CSS -->
+
+    <script src="~/Content/js/jquery.maskMoney.js"></script>
+    <link href=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/css/wizard.css") rel="stylesheet">
 }
 
 
@@ -27,18 +31,21 @@
     <div class="col-sm-12">
         <div class="white-box">
             <div class="pull-right">
-                <button data-toggle="modal" onclick="add_cat()" class="btn btn-success waves-effect waves-light" type="button"><span class="btn-label"><i class="fa fa-save"></i></span>CADASTRAR</button>
+                <button data-toggle="modal" onclick="add_prod()" class="btn btn-success waves-effect waves-light" type="button"><span class="btn-label"><i class="fa fa-save"></i></span>CADASTRAR</button>
             </div>
 
 
-            <p class="text-muted m-b-30">Lista de Categorias</p>
+            <p class="text-muted m-b-30">Lista de Produtos</p>
             <div class="table-responsive">
                 <table id="example23" class="display nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Super Categoria</th>
+                            <th>Cod. Barras</th>
+                            <th>Super Produto</th>
+                            <th>Categoria</th>
+                            <th>Qtd. Prod</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
@@ -48,39 +55,58 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade bs-example-modal-lg" id="modalsave" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#2f323e">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO CATEGORIAS</h4>
+                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO PRODUTOS</h4>
                 </div>
                 <div class="modal-body">
 
-                    <form id="f_save_cat" data-toggle="validator" class="form-horizontal">
+                    <form id="form_save" data-toggle="validator" class="form-horizontal">
+
+
                         <div class="form-group">
-                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO CATEGORIA </label>
+                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO PRODUTO </label>
                             <div class="col-xs-8 col-sm-8">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio" value="sub" checked>SUB
+                                    <input type="radio" name="optradio" value="super" checked>SUPER
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio" value="super">SUPER
+                                    <input type="radio" name="optradio" value="sub" >SUB
                                 </label>
 
                             </div>
 
                         </div>
                         <div class="form-group">
-                            <label for="inputName4" class="control-label col-xs-3 col-sm-3"> NOME CATEGORIA</label>
+                            <label for="edt_inputName4" class="control-label col-xs-3 col-sm-3"> NOME PRODUTO </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="inputName4" minlength="3" maxlength="100" placeholder="Preencha com Nome" required>
+                                <input type="text" class="form-control" name="desc_prod" id="desc_prod" minlength="3" maxlength="100" placeholder="Preencha com Nome" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edt_inputName4" class="control-label col-xs-3 col-sm-3"> COD BARRAS </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="cod_barras" id="cod_barras" minlength="3" maxlength="100" placeholder="Preencha o Cód de Barras" required>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
 
-                        <div class="form-group camposExtras">
-                            <label class=" control-label col-xs-3 col-sm-3" for='selectcat'> SUPER CATEGORIA</label>
+                        <div class="form-group">
+                            <label for="qtd_prod" class="control-label col-xs-3 col-sm-3"> QUANTIDADE </label>
+                            <div class="col-sm-8">
+                                <input type="text" class=" int-number form-control " name="qtd_prod" id="qtd_prod" placeholder="Preencha a Quantidade de Produtos" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class=" control-label col-xs-3 col-sm-3" for='selectcat'> CATEGORIA</label>
                             <div class="col-xs-8 col-sm-8">
 
                                 <select id="selectcat" name="selectcat" class="form-control select2 col-xs-9" required>
@@ -88,57 +114,11 @@
                                 </select>
                             </div>
                         </div>
-
-                </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="btnSave" class="btn btn-primary waves-effect text-left" data-tooltip="tooltip">Guardar</button>
-
-                </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-    <!-- /.modal -->
-    <!-- /.modal-dialog -->
-    <div class="modal fade bs-example-modal-lg" id="modalsave" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:#2f323e">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO CATEGORIAS</h4>
-                </div>
-                <div class="modal-body">
-
-                    <form id="f_save_cat" data-toggle="validator" class="form-horizontal">
-                        <div class="form-group">
-                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO CATEGORIA </label>
-                            <div class="col-xs-8 col-sm-8">
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" value="sub" checked>SUB
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="optradio" value="super">SUPER
-                                </label>
-
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName4" class="control-label col-xs-3 col-sm-3"> NOME CATEGORIA</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="inputName4" minlength="3" maxlength="100" placeholder="Preencha com Nome" required>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-
                         <div class="form-group camposExtras">
-                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'> SUPER CATEGORIA</label>
+                            <label class=" control-label col-xs-3 col-sm-3" for='selectprod'> SUPER PRODUTO</label>
                             <div class="col-xs-8 col-sm-8">
 
-                                <select id="selectcat" name="selectcat" class="form-control select2 col-xs-9" required>
+                                <select id="selectprod" name="selectprod" class="form-control select2 col-xs-9" required>
                                     <option value="test" selected>Opcões</option>
                                 </select>
                             </div>
@@ -158,44 +138,69 @@
     </div>
     <!-- /.modal -->
 
-    <div class="modal fade bs-example-modal-lg" id="modaledit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal fade bs-example-modal-lg" id="editsave" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#2f323e">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO CATEGORIAS</h4>
+                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO PRODUTOS</h4>
                 </div>
                 <div class="modal-body">
 
-                    <form id="f_edit_cat" data-toggle="validator" class="form-horizontal">
+                    <form id="f_edit_prod" data-toggle="validator" class="form-horizontal">
+                        <input type="hidden" id="edit_hide" name="edit_hide"/>
 
-                        <input type="hidden" id="custId" name="custId"/>
                         <div class="form-group">
-                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO CATEGORIA </label>
+                            <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO PRODUTO </label>
                             <div class="col-xs-8 col-sm-8">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio_edit" id="op1" value="sub" checked>SUB
+                                    <input type="radio" name="edit_optradio" id="op2" value="super" checked>SUPER
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio_edit" id="op2" value="super">SUPER
+                                    <input type="radio" name="edit_optradio" id="op1" value="sub">SUB
                                 </label>
 
                             </div>
 
                         </div>
                         <div class="form-group">
-                            <label for="edt_inputName4" class="control-label col-xs-3 col-sm-3"> NOME CATEGORIA</label>
+                            <label for="edit_desc_prod" class="control-label col-xs-3 col-sm-3"> NOME PRODUTO </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="edt_inputName4" id="edt_inputName4" minlength="3" maxlength="100" placeholder="Preencha com Nome" required>
+                                <input type="text" class="form-control" name="edit_desc_prod" id="edit_desc_prod" minlength="3" maxlength="100" placeholder="Preencha com Nome" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_cod_barras" class="control-label col-xs-3 col-sm-3"> COD BARRAS </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="edit_cod_barras" id="edit_cod_barras" minlength="3" maxlength="100" placeholder="Preencha o Cód de Barras" required>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
 
-                        <div class="form-group edit_camposExtras">
-                            <label class=" control-label col-xs-3 col-sm-3" for='edit_selectcat'> SUPER CATEGORIA</label>
+                        <div class="form-group">
+                            <label for="edit_qtd_prod" class="control-label col-xs-3 col-sm-3"> QUANTIDADE </label>
+                            <div class="col-sm-8">
+                                <input type="text" class=" int-number form-control " name="edit_qtd_prod" id="edit_qtd_prod" placeholder="Preencha a Quantidade de Produtos" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class=" control-label col-xs-3 col-sm-3" for='selectcat'> CATEGORIA</label>
                             <div class="col-xs-8 col-sm-8">
 
                                 <select id="edit_selectcat" name="edit_selectcat" class="form-control select2 col-xs-9" required>
+                                    <option value="test" selected>Opcões</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group edit_qtd_prod_camposExtras">
+                            <label class=" control-label col-xs-3 col-sm-3" for='edit_selectprod'> SUPER PRODUTO</label>
+                            <div class="col-xs-8 col-sm-8">
+
+                                <select id="edit_selectprod" name="edit_selectprod" class="form-control select2 col-xs-9" required>
                                     <option value="test" selected>Opcões</option>
                                 </select>
                             </div>
@@ -214,7 +219,6 @@
         </div>
     </div>
     <!-- /.modal -->
-
 
 
 }
@@ -240,9 +244,24 @@
     <script src=@Url.Content("/Content/js/validator.js")></script>
     <script src=@Url.Content("/Content/plugins/bower_components/sweetalert/sweetalert.min.js")></script>
     <script src=@Url.Content("/Content/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js")></script>
+    <!-- Form Wizard JavaScript -->
+    <script src=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/dist/jquery-wizard.min.js")></script>
+    <!-- FormValidation -->
+    <link rel="stylesheet" href=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.css")>
+    <!-- FormValidation plugin and the class supports validating Bootstrap form -->
+    <script src=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.js")></script>
+    <script src=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/libs/formvalidation/bootstrap.min.js")></script>
+
+
     <script>
         // For select 2
-
+    $(document).on("input", ".decimal-number", function (e) {
+        this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\,/g, '$1');
+    });
+    //Integer Number
+    $(document).on("input", ".int-number", function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
 
         $('#example23').DataTable({
             "language": {
@@ -262,15 +281,18 @@
                 }
             },
             "ajax": {
-                "url": '@Url.Action("showCategorias", "Categoria")',
+                "url": '@Url.Action("showProdutos", "Produto")',
                 "type": "GET",
                 "dataSrc": ""
             },
 
             "columns": [
-                { "data": "id_cat_pk", 'width': '10%' },
-                { "data": "desc_cat", 'width': '15%' },
-                { "data": "fk_cat_super", 'width': '15%' },
+                { "data": "id_prod_pk", 'width': '10%' },
+                { "data": "desc_prod", 'width': '15%' },
+                { "data": "cod_barras", 'width': '15%' },
+                { "data": "fk_prod_super", 'width': '15%' },
+                { "data": "fk_cat", 'width': '15%' },
+                { "data": "qtd_prod", 'width': '15%' },
                 {
                     "data": null, 'width': '20%',
                     "render": function (data, type, row) {
@@ -284,7 +306,7 @@
                 {
                     "data": null, 'width': '20%',
                     "render": function (data, type, row) {
-                        return '<button data-toggle="tooltip" data-placement="top" title = "Editar" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-primary" onclick="edit_cat(' + data.id_cat_pk + ')"><i class="glyphicon glyphicon-pencil"></i></button><button data-toggle="tooltip" data-placement="top" title = "Mudar Status" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-warning" onclick="mudar_status(' + data.id_cat_pk + ')"><i class="glyphicon glyphicon-ban-circle"></i></button><button data-toggle="tooltip" data-placement="top" title = "Excluir Categoria" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-danger" onclick="excluircat(' + data.id_cat_pk + ')"><i class="glyphicon glyphicon-remove"></i>';
+                        return '<button data-toggle="tooltip" data-placement="top" title = "Editar" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-primary" onclick="edit_prod(' + data.id_prod_pk + ')"><i class="glyphicon glyphicon-pencil"></i></button><button data-toggle="tooltip" data-placement="top" title = "Mudar Status" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-warning" onclick="mudar_status(' + data.id_prod_pk + ')"><i class="glyphicon glyphicon-ban-circle"></i></button><button data-toggle="tooltip" data-placement="top" title = "Excluir Categoria" style="font-size: 12px ; padding: 0px 3px;" class="btn btn-danger" onclick="excluirPROD(' + data.id_prod_pk + ')"><i class="glyphicon glyphicon-remove"></i>';
                     },
                 }
             ],
@@ -308,7 +330,7 @@
 
         });
 
-       
+
 
 
         $(".select2").select2();
@@ -356,92 +378,151 @@
 
         });
 
-         $('input[name="optradio_edit"]').change(function () {
-            if ($('input[name="optradio_edit"]:checked').val() === "sub") {
-                $('.edit_camposExtras').show();
-            } else {
-                $('.edit_camposExtras').hide();
-            }
+        $(document).ready(function () {
 
-
-        });
-        //edit_selectcat
-        function add_cat() {
-
-            $('#f_save_cat')[0].reset();
-            
-            $('#modalsave').modal('show');
-        }
-
-        //EDIT 
-        function edit_cat(id) {
-
-            $('#f_edit_cat')[0].reset();
             $.ajax({
                 type: 'get',
                 dataType: 'json',
-                url: '/Categoria/getCategorias/'+id,
+                url: '/Produto/listProdutos',
                 success: function (data, textStatus, jqXHR) {
                     //alert(response);
-                    console.log(data[0].desc_cat);
-
-                    $("#edt_inputName4").val(data[0].desc_cat);
-                    $("#custId").val(data[0].id_cat_pk);    
-
-                    if (data[0].fk_cat_super > 0) {
-                        $("#op1").prop("checked", true);
-                        $("#edit_selectcat").val(data[0].fk_cat_super).change();
-                        $('.edit_camposExtras').show();
-                    } else {
-                        $("#op2").prop("checked", true);
-                        $('.edit_camposExtras').hide();
-                    }
-                    
+                    console.log(data);
+                    var selectbox = $('#selectprod');
+                    $.each(data, function (i, d) {
+                        selectbox.append('<option value="' + d.id_prod_pk + '">' + d.desc_prod + '</option>');
+                    });
                 },
                 error: function (data, textStatus, errorThrown) {
                     alert('Error - ' + errorThrown);
                 }
             });
 
-            $('#modaledit').modal('show');
+        });
+        $(document).ready(function () {
+
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: '/Produto/listProdutos',
+                success: function (data, textStatus, jqXHR) {
+                    //alert(response);
+                    console.log(data);
+                    var selectbox = $('#edit_selectprod');
+                    $.each(data, function (i, d) {
+                        selectbox.append('<option value="' + d.id_prod_pk + '">' + d.desc_prod + '</option>');
+                    });
+                },
+                error: function (data, textStatus, errorThrown) {
+                    alert('Error - ' + errorThrown);
+                }
+            });
+
+        });
+
+        $('input[name="edit_optradio"]').change(function () {
+             if ($('input[name="edit_optradio"]:checked').val() === "sub") {
+                 $('.edit_qtd_prod_camposExtras').show();
+            } else {
+                 $('.edit_qtd_prod_camposExtras').hide();
+            }
+
+
+        });
+
+        //edit_selectcat
+        function add_prod() {
+
+            $('#form_save')[0].reset();
+
+            $('#modalsave').modal('show');
+        }
+
+        //EDIT
+        function edit_prod(id) {
+            /*
+               ct.desc_prod = $("#desc_prod").val();
+                ct.cod_barras = $("#cod_barras").val();
+                ct.qtd_prod = $("#qtd_prod").val();
+                ct.fk_cat = $("#selectcat").val();
+                ct.fk_prod_super = $("#selectprod").val();
+             
+             */
+            $('#f_edit_prod')[0].reset();
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: '/Produto/getProdutos/'+id,
+                success: function (data, textStatus, jqXHR) {
+                    //alert(response);
+                    console.log(data[0].id_prod_pk);
+                    $("#edit_hide").val(data[0].id_prod_pk);
+                    $("#edit_desc_prod").val(data[0].desc_prod);
+                    $("#edit_cod_barras").val(data[0].cod_barras);
+                    $("#edit_qtd_prod").val(data[0].qtd_prod);
+                    $("#edit_selectcat").val(data[0].fk_cat).change();
+
+                    if (data[0].edit_selectprod > 0) {
+                        $("#op1").prop("checked", true);
+                        $("#edit_selectprod").val(data[0].fk_prod_super).change();
+                        $('.edit_qtd_prod_camposExtras').show();
+                    } else {
+                        $("#op2").prop("checked", true);
+                        $('.edit_qtd_prod_camposExtras').hide();
+                    }
+
+                },
+                error: function (data, textStatus, errorThrown) {
+                    alert('Error - ' + errorThrown);
+                }
+            });
+
+            $('#editsave').modal('show');
         }
 
 
         //funcao jquery salvar categoria
         $("#btnEdit").click(function () {
-            supercat = $("#edit_selectcat").val();
-            opcao = $('input[name="optradio_edit"]:checked').val();
-            id = $("#custId").val();
+            supercat = $("#edit_selectprod").val();
+            opcao = $('input[name="edit_optradio"]:checked').val();
+            id = $("#edit_hide").val();
             console.log(id);
             console.log(supercat);
             console.log("radio "+opcao);
-            if ($('input[name="optradio_edit"]:checked').val() === "sub" && supercat > 0) {
+            if ($('input[name="edit_optradio"]:checked').val() === "sub" && supercat > 0) {
 
                 var ct = {};
-                ct.id_cat_pk = $("#custId").val();
-                ct.desc_cat = $("#edt_inputName4").val();
-                ct.fk_cat_super = $("#edit_selectcat").val();
+                ct.id_prod_pk = $("#edit_hide").val();
+                ct.desc_prod = $("#edit_desc_prod").val();
+                ct.fk_cat = $("#edit_selectcat").val();
+                ct.cod_barras = $("#edit_cod_barras").val();
+                ct.qtd_prod = $("#edit_qtd_prod").val();
+                ct.fk_prod_super = $("edit_selectprod").val();
+
                 console.log(ct);
                 edit(ct);
 
             }
 
-            if ($('input[name="optradio_edit"]:checked').val() === "super") {
+            if ($('input[name="edit_optradio"]:checked').val() === "super") {
                 var ct = {};
-                ct.id_cat_pk = $("#custId").val();
-                ct.desc_cat = $("#edt_inputName4").val();
+                ct.id_prod_pk = $("#edit_hide").val();
+                ct.desc_prod = $("#edit_desc_prod").val();
+                ct.fk_cat = $("#edit_selectcat").val();
+                ct.cod_barras = $("#edit_cod_barras").val();
+                ct.qtd_prod = $("#edit_qtd_prod").val();
+                
                 console.log(ct);
                 edit(ct);
             }
         });
 
-        
+
         //ajax alterar Categoria
         function edit(ct) {
 
              $.ajax({
                 type: "POST",
-                url:'@Url.Action("updateCategoria", "Categoria")',
+                url:'@Url.Action("updateProduto", "Produto")',
                 data: '{ct: ' + JSON.stringify(ct) + '}',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -456,7 +537,7 @@
                         confirmButtonText: 'Aceitar',
                     });
                     $("#modalsave").modal('hide');
-                    location.reload();
+                    //location.reload();
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -474,53 +555,21 @@
 
         }
 
-        function edit(ct) {
-
-             $.ajax({
-                type: "POST",
-                url:'@Url.Action("updateCategoria", "Categoria")',
-                data: '{ct: ' + JSON.stringify(ct) + '}',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-
-                    swal({
-                        title: 'CADASTRO REALIZADO!',
-                        text: 'Dados cadastrados com sucesso',
-                        type: 'success',
-                        html: true,
-                        confirmButtonClass: 'btn-warning',
-                        confirmButtonText: 'Aceitar',
-                    });
-                    $("#modalsave").modal('hide');
-                    location.reload();
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal({
-                        title: 'AVISO!',
-                        text: 'Error - ' + errorThrown,
-                        type: 'warning',
-                        html: true,
-                        confirmButtonClass: 'btn-warning',
-                        confirmButtonText: 'Aceitar',
-                    });
-
-                }
-            });
-
-        }
         //function save
         $("#btnSave").click(function () {
             supercat = $("#selectcat").val();
             opcao = $('input[name="optradio"]:checked').val();
             console.log(supercat);
             console.log(opcao);
+
             if ($('input[name="optradio"]:checked').val() === "sub" && supercat > 0) {
 
                 var ct = {};
-                ct.desc_cat = $("#inputName4").val();
-                ct.fk_cat_super = $("#selectcat").val();
+                ct.desc_prod = $("#desc_prod").val();
+                ct.cod_barras = $("#cod_barras").val();
+                ct.qtd_prod = $("#qtd_prod").val();
+                ct.fk_cat = $("#selectcat").val();
+                ct.fk_prod_super = $("#selectprod").val();
                 console.log(ct);
                 save(ct);
 
@@ -528,18 +577,21 @@
 
             if ($('input[name="optradio"]:checked').val() === "super") {
                 var ct = {};
-                ct.desc_cat = $("#inputName4").val();
+                ct.desc_prod = $("#desc_prod").val();
+                ct.cod_barras = $("#cod_barras").val();
+                ct.qtd_prod = $("#qtd_prod").val();
+                ct.fk_cat = $("#selectcat").val();
                 console.log(ct);
                 save(ct);
             }
         });
 
-       
+
         function save(ct) {
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("createCategoria", "Categoria")',
+                url: '@Url.Action("createProduto", "Produto")',
                 data: '{ct: ' + JSON.stringify(ct) + '}',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -554,6 +606,7 @@
                         confirmButtonText: 'Aceitar',
                     });
                     $("#modalsave").modal('hide');
+                    console.log(data);
                     location.reload();
 
                 },
@@ -572,7 +625,7 @@
 
         }
 
-        function excluircat(id) {
+        function excluirPROD(id) {
 
             swal({
                 title: "Tem certeza que você quer excluir a categoria "+id+"?",
@@ -587,22 +640,22 @@
                 function () {
                         $.ajax({
                         type: "POST",
-                        url: '@Url.Action("deleteCategoria", "Categoria")',
+                        url: '@Url.Action("deleteProduto", "Produto")',
                          data: '{id: ' + JSON.stringify(id) + '}',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             console.log(data);
                             swal({
-                                title: 'CATEGORIA EXCLUIDA',
-                                text: 'Exclusao Realizada com sucesso',
+                                title: 'PRODUTO EXCLUIDO COM SUCESSO',
+                                text: 'Exclusão Realizada com sucesso',
                                 type: 'success',
                                 html: true,
                                 confirmButtonClass: 'btn-warning',
                                 confirmButtonText: 'Aceitar',
                             });
                             location.reload();
-                    
+
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -620,13 +673,13 @@
 
             });
 
-           
+
         }
 
         function mudar_status(id) {
 
             swal({
-                title: "Tem certeza que você quer alterar o status da categoria "+id+"?",
+                title: "Tem certeza que você quer alterar o status do Produto "+id+"?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-danger",
@@ -637,14 +690,14 @@
                 function () {
                         $.ajax({
                         type: "POST",
-                        url: '@Url.Action("statusCategoria", "Categoria")',
+                        url: '@Url.Action("statusProduto", "Produto")',
                          data: '{id: ' + JSON.stringify(id) + '}',
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             console.log(data);
                             swal({
-                                title: 'CATEGORIA ALTERADA',
+                                title: 'PRODUTO ALTERADO!',
                                 text: 'Status alterado com sucesso',
                                 type: 'success',
                                 html: true,
@@ -652,7 +705,7 @@
                                 confirmButtonText: 'Aceitar',
                             });
                             location.reload();
-                    
+
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -670,7 +723,7 @@
 
             });
 
-           
+
         }
     </script>
 
@@ -678,3 +731,4 @@
     <script src=@Url.Content("/Content/plugins/bower_components/styleswitcher/jQuery.style.switcher.js")></script>
 
 }
+

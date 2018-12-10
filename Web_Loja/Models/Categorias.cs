@@ -24,9 +24,9 @@ namespace Web_Loja.Models
         public long id_cat_pk { get; set; }
         public string desc_cat { get; set; }
         public byte status { get; set; }
-        public byte[] data_cri_cat { get; set; }
+        public Nullable<System.DateTime> data_cri_cat { get; set; }
         public Nullable<System.DateTime> data_cri_att { get; set; }
-        public long fk_cat_super { get; set; }
+        public Nullable<long> fk_cat_super { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Categorias> Categorias1 { get; set; }

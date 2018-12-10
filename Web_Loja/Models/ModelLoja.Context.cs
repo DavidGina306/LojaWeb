@@ -132,5 +132,30 @@ namespace Web_Loja.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
+    
+        public virtual ObjectResult<Nullable<decimal>> LojaVirtual(Nullable<int> padraoId, string categoriaNome, Nullable<long> fk_super, Nullable<System.DateTime> data_criacao, Nullable<byte> status)
+        {
+            var padraoIdParameter = padraoId.HasValue ?
+                new ObjectParameter("PadraoId", padraoId) :
+                new ObjectParameter("PadraoId", typeof(int));
+    
+            var categoriaNomeParameter = categoriaNome != null ?
+                new ObjectParameter("CategoriaNome", categoriaNome) :
+                new ObjectParameter("CategoriaNome", typeof(string));
+    
+            var fk_superParameter = fk_super.HasValue ?
+                new ObjectParameter("fk_super", fk_super) :
+                new ObjectParameter("fk_super", typeof(long));
+    
+            var data_criacaoParameter = data_criacao.HasValue ?
+                new ObjectParameter("data_criacao", data_criacao) :
+                new ObjectParameter("data_criacao", typeof(System.DateTime));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(byte));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("LojaVirtual", padraoIdParameter, categoriaNomeParameter, fk_superParameter, data_criacaoParameter, statusParameter);
+        }
     }
 }

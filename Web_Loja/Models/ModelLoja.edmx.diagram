@@ -5,11 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="32ec0edf4c1b4ba3bd2cb2ec67feac5f" Name="Diagram1">
-        <EntityTypeShape EntityType="LojaVirtualModel.Categorias" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="LojaVirtualModel.Produtos" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="LojaVirtualModel.FK_Categorias_Categorias" ManuallyRouted="false" />
-        <AssociationConnector Association="LojaVirtualModel.FK_Produtos_Categorias" ManuallyRouted="false" />
-        <AssociationConnector Association="LojaVirtualModel.FK_Produtos_Produtos" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="LojaVirtualModel.Categorias" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="LojaVirtualModel.Produtos" Width="1.5" PointX="3" PointY="1" />
+        <AssociationConnector Association="LojaVirtualModel.FK_Categorias_Categorias" />
+        <AssociationConnector Association="LojaVirtualModel.FK_Produtos_Categorias" />
+        <AssociationConnector Association="LojaVirtualModel.FK_Produtos_Produtos" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

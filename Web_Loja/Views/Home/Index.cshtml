@@ -1,8 +1,29 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "HOME";
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
 
+@section page {
 
+    <div class="col-sm-12">
+        <div class="white-box">
+            <div class="row">
+          
+                <div class="col-sm-6">
+                    <h3 class="box-title m-b-0">Cadastro de Categoria</h3> <small>Clique aqui para Cadastrar uma Categoria<code>Categoria</code></small>
+                    <br />
+                    <br /> <a class="popup-youtube btn btn-danger" href="@Url.Action("Index", "Categoria")">Categorias</a>
+                    <br>
+                </div>
+                <div class="col-sm-6">
+                    <h3 class="box-title m-b-0">Produtos</h3> <small>Clique aqui para cadastrar um produto.<code>Produtos</code></small>
+                    <br />
+                    <br /> <a class="popup-gmaps btn btn-info" href="@Url.Action("Index", "Produto")">Produtos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
 

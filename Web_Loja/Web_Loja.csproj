@@ -50,6 +50,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -155,6 +158,7 @@
     <Content Include="Content\js\flot-data.js" />
     <Content Include="Content\js\footable-init.js" />
     <Content Include="Content\js\jasny-bootstrap.js" />
+    <Content Include="Content\js\jquery.maskMoney.js" />
     <Content Include="Content\js\jquery.PrintArea.js" />
     <Content Include="Content\js\jquery.slimscroll.js" />
     <Content Include="Content\js\jsgrid-init.js" />
@@ -2116,6 +2120,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProdutoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2983,6 +2988,7 @@
     <Content Include="Views\Shared\TopNavigation.cshtml" />
     <Content Include="Views\Shared\LeftNavigation.cshtml" />
     <Content Include="Views\Categoria\Index.cshtml" />
+    <Content Include="Views\Produto\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
