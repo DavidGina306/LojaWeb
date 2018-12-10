@@ -43,7 +43,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -2092,13 +2100,51 @@
     <Content Include="Content\plugins\images\users\varun.jpg" />
     <Content Include="Content\plugins\images\weather-bg.jpg" />
     <Content Include="Global.asax" />
+    <Content Include="Models\ModelLoja.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModelLoja.Context.cs</LastGenOutput>
+      <DependentUpon>ModelLoja.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ModelLoja.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModelLoja.edmx</DependentUpon>
+      <LastGenOutput>ModelLoja.cs</LastGenOutput>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Categorias.cs">
+      <DependentUpon>ModelLoja.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelLoja.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelLoja.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelLoja.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelLoja.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelLoja.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelLoja.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Produtos.cs">
+      <DependentUpon>ModelLoja.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>ModelLoja.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>ModelLoja.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -2924,11 +2970,19 @@
     <Content Include="Content\plugins\bower_components\typeahead.js-master\typeahead.js.jquery.json" />
     <Content Include="Content\plugins\images\assets\photothumb.db" />
     <Content Include="Content\plugins\images\large\.DS_Store" />
+    <EntityDeploy Include="Models\ModelLoja.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModelLoja.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ModelLoja.edmx.diagram">
+      <DependentUpon>ModelLoja.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Views\Shared\MyLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\TopNavigation.cshtml" />
     <Content Include="Views\Shared\LeftNavigation.cshtml" />
+    <Content Include="Views\Categoria\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2938,7 +2992,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
