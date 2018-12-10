@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
 
+@section Title{
+    <h4 class="page-title">PRODUTOS</h4>
+
+}
 
 @section head {
     <link href=@Url.Content("/Content/plugins/bower_components/datatables/jquery.dataTables.min.css") rel="stylesheet" type="text/css" />
@@ -21,7 +25,7 @@
     <link href=@Url.Content("/Content/plugins/bower_components/multiselect/css/multi-select.css") rel="stylesheet" type="text/css" />
     <!-- Wizard CSS -->
 
-    <script src="~/Content/js/jquery.maskMoney.js"></script>
+    
     <link href=@Url.Content("/Content/plugins/bower_components/jquery-wizard-master/css/wizard.css") rel="stylesheet">
 }
 
@@ -75,7 +79,7 @@
                                     <input type="radio" name="optradio" value="super" checked>SUPER
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="optradio" value="sub" >SUB
+                                    <input type="radio" name="optradio" value="sub">SUB
                                 </label>
 
                             </div>
@@ -143,12 +147,12 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#2f323e">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">CADASTRO PRODUTOS</h4>
+                    <h4 class="modal-title" id="myLargeModalLabel" style="color:white">EDITAR PRODUTOS</h4>
                 </div>
                 <div class="modal-body">
 
                     <form id="f_edit_prod" data-toggle="validator" class="form-horizontal">
-                        <input type="hidden" id="edit_hide" name="edit_hide"/>
+                        <input type="hidden" id="edit_hide" name="edit_hide" />
 
                         <div class="form-group">
                             <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO PRODUTO </label>
@@ -206,7 +210,7 @@
                             </div>
                         </div>
 
-</div>
+                </div>
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
@@ -445,7 +449,7 @@
                 ct.qtd_prod = $("#qtd_prod").val();
                 ct.fk_cat = $("#selectcat").val();
                 ct.fk_prod_super = $("#selectprod").val();
-             
+
              */
             $('#f_edit_prod')[0].reset();
             $.ajax({
@@ -510,7 +514,7 @@
                 ct.fk_cat = $("#edit_selectcat").val();
                 ct.cod_barras = $("#edit_cod_barras").val();
                 ct.qtd_prod = $("#edit_qtd_prod").val();
-                
+
                 console.log(ct);
                 edit(ct);
             }
@@ -529,7 +533,7 @@
                 success: function (data) {
 
                     swal({
-                        title: 'CADASTRO REALIZADO!',
+                        title: 'ALTERAÇÃO REALIZADA!',
                         text: 'Dados cadastrados com sucesso',
                         type: 'success',
                         html: true,

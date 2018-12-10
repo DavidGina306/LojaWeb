@@ -5,6 +5,10 @@
     ViewBag.Title = "LOJAWEB - CATEGORIA";
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
+@section Title{
+    <h4 class="page-title">CATEGORIAS</h4>
+
+}
 
 @section head {
     <link href=@Url.Content("/Content/plugins/bower_components/datatables/jquery.dataTables.min.css") rel="stylesheet" type="text/css" />
@@ -169,7 +173,7 @@
 
                     <form id="f_edit_cat" data-toggle="validator" class="form-horizontal">
 
-                        <input type="hidden" id="custId" name="custId"/>
+                        <input type="hidden" id="custId" name="custId" />
                         <div class="form-group">
                             <label class=" control-label col-xs-3 col-sm-3" for='PDV_CAT'>TIPO CATEGORIA </label>
                             <div class="col-xs-8 col-sm-8">
@@ -201,7 +205,7 @@
                             </div>
                         </div>
 
-</div>
+                </div>
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
@@ -308,7 +312,7 @@
 
         });
 
-       
+
 
 
         $(".select2").select2();
@@ -369,11 +373,11 @@
         function add_cat() {
 
             $('#f_save_cat')[0].reset();
-            
+
             $('#modalsave').modal('show');
         }
 
-        //EDIT 
+        //EDIT
         function edit_cat(id) {
 
             $('#f_edit_cat')[0].reset();
@@ -386,7 +390,7 @@
                     console.log(data[0].desc_cat);
 
                     $("#edt_inputName4").val(data[0].desc_cat);
-                    $("#custId").val(data[0].id_cat_pk);    
+                    $("#custId").val(data[0].id_cat_pk);
 
                     if (data[0].fk_cat_super > 0) {
                         $("#op1").prop("checked", true);
@@ -396,7 +400,7 @@
                         $("#op2").prop("checked", true);
                         $('.edit_camposExtras').hide();
                     }
-                    
+
                 },
                 error: function (data, textStatus, errorThrown) {
                     alert('Error - ' + errorThrown);
@@ -435,7 +439,7 @@
             }
         });
 
-        
+
         //ajax alterar Categoria
         function edit(ct) {
 
@@ -534,7 +538,7 @@
             }
         });
 
-       
+
         function save(ct) {
 
             $.ajax({
@@ -602,7 +606,7 @@
                                 confirmButtonText: 'Aceitar',
                             });
                             location.reload();
-                    
+
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -620,7 +624,7 @@
 
             });
 
-           
+
         }
 
         function mudar_status(id) {
@@ -652,7 +656,7 @@
                                 confirmButtonText: 'Aceitar',
                             });
                             location.reload();
-                    
+
 
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
@@ -670,7 +674,7 @@
 
             });
 
-           
+
         }
     </script>
 
